@@ -16,6 +16,7 @@ def generate_launch_description():
     # Paths to launch and params files
     bringup_launch_path = os.path.join(bringup_dir, 'launch', 'bringup_launch.py')
     default_params_file = os.path.join(tb_unizar_nav_dir, 'params', 'nav2_params.yaml')
+    default_map_file = os.path.join(tb_unizar_nav_dir, 'maps', 'dummy.yaml')
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
@@ -53,7 +54,7 @@ def generate_launch_description():
         'slam', default_value='False', description='Whether run a SLAM'
     )
     declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map', default_value='', description='Full path to map yaml file to load'
+        'map', default_value=default_map_file, description='Full path to map yaml file to load'
     )
     declare_use_localization_cmd = DeclareLaunchArgument(
         'use_localization', default_value='False',
