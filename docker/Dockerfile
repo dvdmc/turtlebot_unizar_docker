@@ -34,20 +34,15 @@ WORKDIR /root/turtlebot2_ws
 RUN rosdep install -i --from-path src --rosdistro humble -y
 RUN . /opt/ros/humble/setup.sh && colcon build --symlink-install --executor sequential
 
-RUN echo "source /root/turtlebot2_ws/install/setup.bash" >> /root/.bashrc
-
 # NAV2
 RUN apt update && apt install ros-humble-navigation2 ros-humble-nav2-bringup -y
 # BELOW CHANGES TO "sudo apt install ros-<ros2-distro>-nav2-minimal-tb*" from ROS Jazzy
 RUN apt install ros-humble-turtlebot3-gazebo -y
-# Iron and older only with Gazebo Classic
-RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
-echo "export TURTLEBOT3_MODEL=waffle" >> /root/.bashrc && \
-echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/humble/share/turtlebot3_gazebo/models" >> /root/.bashrc
 
-RUN echo "export ROS_DOMAIN_ID=3" >> /root/.bashrc
-RUN echo "export ROS_LOCALHOST_ONLY=0" >> /root/.bashrc
-RUN echo "export ROS_DISCOVERY_SERVER=127.0.0.1:11811" >> /root/.bashrc
+# Iron and older only with Gazebo Classic
+RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
+RUN echo "source /root/turtlebot2_ws/install/setup.bash" >> /root/.bashrc
+
 WORKDIR /root/catkin_ws
 
 RUN rm -rf log # remove log folder
