@@ -46,23 +46,23 @@ def generate_launch_description():
     )
     declare_use_namespace_cmd = DeclareLaunchArgument(
         'use_namespace',
-        default_value='true',
+        default_value='True',
         description='Whether to apply a namespace to the navigation stack',
     )
     declare_slam_cmd = DeclareLaunchArgument(
-        'slam', default_value='false', description='Whether run a SLAM'
+        'slam', default_value='False', description='Whether run a SLAM'
     )
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map', default_value='', description='Full path to map yaml file to load'
     )
     declare_use_localization_cmd = DeclareLaunchArgument(
-        'use_localization', default_value='false',
+        'use_localization', default_value='False',
         description='Whether to enable localization or not'
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='false',
-        description='Use simulation (Gazebo) clock if true',
+        default_value='False',
+        description='Use simulation (Gazebo) clock if True',
     )
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
@@ -72,7 +72,7 @@ def generate_launch_description():
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart',
-        default_value='true',
+        default_value='True',
         description='Automatically startup the nav2 stack',
     )
 
