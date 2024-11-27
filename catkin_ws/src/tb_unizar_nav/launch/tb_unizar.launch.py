@@ -14,8 +14,8 @@ def generate_launch_description():
     tb_unizar_nav_dir = get_package_share_directory('tb_unizar_nav')
 
     # Paths to launch and params files
-    bringup_launch_path = PathJoinSubstitution(bringup_dir, 'launch', 'bringup_launch.py')
-    default_params_file = PathJoinSubstitution(tb_unizar_nav_dir, 'params', 'nav2_params.yaml')
+    bringup_launch_path = os.path.join(bringup_dir, 'launch', 'bringup_launch.py')
+    default_params_file = os.path.join(tb_unizar_nav_dir, 'params', 'nav2_params.yaml')
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
@@ -102,8 +102,8 @@ def generate_launch_description():
         [FindPackageShare('kobuki_node'), '/launch/kobuki_node-launch.py']
     )
 
-    # Locate description
-    urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'turtlebot.urdf')
+    # Locate description TODO: Fix the xacro compilation
+    urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'compiled_turtlebot_unizar.urdf')
     with open(urdf, 'r') as infp:
         robot_description = infp.read()
 
@@ -168,5 +168,5 @@ def generate_launch_description():
         kobuki_group,
         start_robot_state_publisher_cmd,
         # Include the bringup launch file
-        # bringup_launch,
+        bringup_launch,
     ])

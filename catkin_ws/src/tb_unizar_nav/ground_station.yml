@@ -39,3 +39,8 @@ windows:
         - sleep 1; ros2 lifecycle set /mocap/mocap4r2_optitrack_driver_node activate
         - sleep 2; ros2 run mocap4r2_robot_gt gt_program -p root_frame:=<%= turtlebot_namespace %>/odom
       <%- end %>
+  - static_transforms:
+      layout:
+      panes:
+        - ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 <%= turtlebot_namespace %>/base_footprint_gt /map 100
+        - ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 /earth /map 100

@@ -4,15 +4,15 @@
     - Stacks    : hexagons
 -->
 <robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
+
   <!-- Bases -->
-  <xacro:include filename="$(find kobuki_description)/urdf/kobuki_standalone.urdf.xacro" />
-  <!-- General -->
-  <xacro:include filename="$(find tb_unizar_nav)/urdf/turtlebot_common_library.urdf.xacro"/>
+  <xacro:include filename="$(find kobuki_description)/urdf/kobuki.urdf.xacro" />
   <!-- Stacks -->
   <xacro:include filename="$(find tb_unizar_nav)/urdf/stacks/hexagons.urdf.xacro"/>
   
   <xacro:kobuki/>
-  <xacro:stack_hexagons                 parent="base_link"/>
+  <xacro:stack_hexagons parent="base_link"/>
+
   <joint name="mocap_joint" type="fixed">
     <parent link="plate_top_link"/>
     <child link="base_mocap"/>

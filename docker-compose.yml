@@ -12,7 +12,6 @@ services:
       RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       TURTLEBOT3_MODEL: wafffle
       GAZEBO_MODEL_PATH: /opt/ros/humble/share/turtlebot3_gazebo/models
-      # ROS_DISCOVERY_SERVER: 127.0.0.1:11811
       
     privileged: true
     volumes:
@@ -24,13 +23,3 @@ services:
       - ./catkin_ws:/root/catkin_ws
     network_mode: "host"
     command: tail -f /dev/null
-
-  # discovery_server:
-  #   image: osrf/ros:humble-desktop
-  #   container_name: discovery_server
-  #   network_mode: host
-  #   command: fastdds discovery --ip-address 192.168.0.150 -p 11811
-  #   environment:
-  #     - ROS_DISCOVERY_SERVER=127.0.0.1:11811
-  #   profiles:
-  #     - ground_station
