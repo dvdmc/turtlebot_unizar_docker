@@ -18,3 +18,10 @@ services:
       - ./catkin_ws:/root/catkin_ws
     network_mode: "host"
     command: tail -f /dev/null
+
+  discovery_server:
+    image: osrf/ros:humble-desktop
+    network_mode: host
+    command: fastdds discovery -i 0 -l husarnet-local -p 11811
+    profiles:
+      - ground_station
