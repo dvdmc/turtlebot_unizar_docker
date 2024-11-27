@@ -8,6 +8,8 @@ services:
     environment:
       DISPLAY: $DISPLAY
       ROS_LOCALHOST_ONLY: 0
+      ROS_DOMAIN_ID: 3
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       TURTLEBOT3_MODEL: wafffle
       GAZEBO_MODEL_PATH: /opt/ros/humble/share/turtlebot3_gazebo/models
       # ROS_DISCOVERY_SERVER: 127.0.0.1:11811
