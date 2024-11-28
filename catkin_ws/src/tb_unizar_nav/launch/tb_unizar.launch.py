@@ -47,26 +47,26 @@ def generate_launch_description():
     
     # Declare launch arguments
     declarenamespace_cmd = DeclareLaunchArgument(
-        'namespace', default_value='ugv1', description='Namespace for the robot'
+        'namespace', default_value='ugv0', description='Namespace for the robot'
     )
     declare_use_namespace_cmd = DeclareLaunchArgument(
         'use_namespace',
-        default_value='True',
+        default_value='false',
         description='Whether to apply a namespace to the navigation stack',
     )
     declare_slam_cmd = DeclareLaunchArgument(
-        'slam', default_value='False', description='Whether run a SLAM'
+        'slam', default_value='false', description='Whether run a SLAM'
     )
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map', default_value=default_map_file, description='Full path to map yaml file to load'
     )
     declare_use_localization_cmd = DeclareLaunchArgument(
-        'use_localization', default_value='False',
+        'use_localization', default_value='false',
         description='Whether to enable localization or not'
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='False',
+        default_value='false',
         description='Use simulation (Gazebo) clock if True',
     )
     declare_nav_params_file_cmd = DeclareLaunchArgument(
@@ -74,8 +74,9 @@ def generate_launch_description():
         default_value=default_nav_params_file,
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
+
     declare_kobuki_params_file_cmd = DeclareLaunchArgument(
-        'params_file',
+        'kobuki_params_file',
         default_value=default_kobuki_params_file,
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
@@ -108,12 +109,7 @@ def generate_launch_description():
         default_value='True',
         description='Whether to start the robot state publisher')
 
-    # Locate the kobuki_node package and its launch file
-    kobuki_launch_path = PythonLaunchDescriptionSource(
-        [FindPackageShare('kobuki_node'), '/launch/kobuki_node-launch.py']
-    )
-
-    with open(default_kobuki_params_file, 'r') as f:
+    with open(kobuki_params_file, 'r') as f:
         kobuki_params = yaml.safe_load(f)['kobuki_ros_node']['ros__parameters']
     
     declare_kobuki_ros_node = Node(package='kobuki_node',
@@ -127,12 +123,12 @@ def generate_launch_description():
         robot_description = infp.read()
 
     # Group the kobuki_node launch file under the specified namespace
-    kobuki_group = GroupAction(
-        actions=[
-            PushRosNamespace(namespace),  # Apply the namespace dynamically
-            declare_kobuki_ros_node,
-        ]
-    )
+    # kobuki_group = GroupAction(
+    #     actions=[
+    #         PushRosNamespace(namespace),  # Apply the namespace dynamically
+    #         declare_kobuki_ros_node,
+    #     ]
+    # )
 
     start_robot_state_publisher_cmd = Node(
         condition=IfCondition(use_robot_state_pub),
@@ -150,7 +146,7 @@ def generate_launch_description():
     bringup_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(bringup_launch_path),
         launch_arguments={
-            # 'namespace': namespace,
+            'namespace': namespace,
             'use_namespace': use_namespace,
             'slam': slam,
             'map': map_yaml_file,
@@ -172,7 +168,8 @@ def generate_launch_description():
         declare_map_yaml_cmd,
         declare_use_localization_cmd,
         declare_use_sim_time_cmd,
-        declare_nav_params_file_cmd,        
+        declare_nav_params_file_cmd,
+        declare_kobuki_params_file_cmd,        
         declare_autostart_cmd,
         declare_use_composition_cmd,
         declare_use_respawn_cmd,

@@ -148,7 +148,7 @@ local_costmap:
     ros__parameters:
       update_frequency: 5.0
       publish_frequency: 2.0
-      global_frame: base_footprint_gt
+      global_frame: odom
       robot_base_frame: base_link
       rolling_window: true
       width: 3
@@ -271,7 +271,7 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
-    local_frame: base_footprint_gt
+    local_frame: odom
     global_frame: map
     robot_base_frame: base_link
     transform_tolerance: 0.1
@@ -308,7 +308,7 @@ velocity_smoother:
 collision_monitor:
   ros__parameters:
     base_frame_id: "base_footprint"
-    odom_frame_id: "base_footprint_gt"
+    odom_frame_id: "odom"
     cmd_vel_in_topic: "cmd_vel_smoothed"
     cmd_vel_out_topic: "cmd_vel"
     state_topic: "collision_monitor_state"
