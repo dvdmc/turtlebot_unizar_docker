@@ -126,7 +126,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
-        namespace=namespace,
+        # namespace=namespace,
         output='screen',
         parameters=[{'use_sim_time': use_sim_time,
                      'robot_description': robot_description}],
@@ -166,7 +166,7 @@ def generate_launch_description():
         declare_log_level_cmd,
         declare_use_robot_state_pub_cmd,
         # Include the kobuki group
-        kobuki_group,
+        included_kobuki_launch,
         start_robot_state_publisher_cmd,
         # Include the bringup launch file
         bringup_launch,
