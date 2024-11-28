@@ -1,3 +1,4 @@
+# This file is inspired by: https://github.com/ros-navigation/navigation2/blob/main/nav2_bringup/launch/bringup_launch.py
 import os
 
 import yaml
