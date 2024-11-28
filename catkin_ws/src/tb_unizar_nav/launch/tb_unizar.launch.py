@@ -108,14 +108,11 @@ def generate_launch_description():
         'use_robot_state_pub',
         default_value='True',
         description='Whether to start the robot state publisher')
-
-    with open(kobuki_params_file, 'r') as f:
-        kobuki_params = yaml.safe_load(f)['kobuki_ros_node']['ros__parameters']
     
     declare_kobuki_ros_node = Node(package='kobuki_node',
                                   executable='kobuki_ros_node',
                                   output='both',
-                                  parameters=[kobuki_params])
+                                  parameters=kobuki_params_file)
 
     # Locate description TODO: Fix the xacro compilation
     urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'compiled_turtlebot_unizar.urdf')
