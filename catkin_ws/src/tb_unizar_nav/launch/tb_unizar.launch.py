@@ -1,4 +1,6 @@
 import os
+
+import yaml
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
 from launch_ros.actions import PushRosNamespace, Node
@@ -15,7 +17,8 @@ def generate_launch_description():
 
     # Paths to launch and params files
     bringup_launch_path = os.path.join(bringup_dir, 'launch', 'bringup_launch.py')
-    default_params_file = os.path.join(tb_unizar_nav_dir, 'params', 'nav2_params.yaml')
+    default_nav_params_file = os.path.join(tb_unizar_nav_dir, 'params', 'nav2_params.yaml')
+    default_kobuki_params_file = os.path.join(tb_unizar_nav_dir, 'params', 'kobuki_params.yaml')
     default_map_file = os.path.join(tb_unizar_nav_dir, 'maps', 'dummy.yaml')
 
     # Create the launch configuration variables
@@ -24,7 +27,8 @@ def generate_launch_description():
     slam = LaunchConfiguration('slam')
     map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
-    params_file = LaunchConfiguration('params_file')
+    nav_params_file = LaunchConfiguration('nav_params_file')
+    kobuki_params_file = LaunchConfiguration('kobuki_params_file')
     autostart = LaunchConfiguration('autostart')
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
@@ -65,11 +69,17 @@ def generate_launch_description():
         default_value='False',
         description='Use simulation (Gazebo) clock if True',
     )
-    declare_params_file_cmd = DeclareLaunchArgument(
-        'params_file',
-        default_value=default_params_file,
+    declare_nav_params_file_cmd = DeclareLaunchArgument(
+        'nav_params_file',
+        default_value=default_nav_params_file,
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
+    declare_kobuki_params_file_cmd = DeclareLaunchArgument(
+        'params_file',
+        default_value=default_kobuki_params_file,
+        description='Full path to the ROS2 parameters file to use for all launched nodes',
+    )
+
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart',
@@ -103,21 +113,24 @@ def generate_launch_description():
         [FindPackageShare('kobuki_node'), '/launch/kobuki_node-launch.py']
     )
 
+    with open(default_kobuki_params_file, 'r') as f:
+        kobuki_params = yaml.safe_load(f)['kobuki_ros_node']['ros__parameters']
+    
+    declare_kobuki_ros_node = Node(package='kobuki_node',
+                                  executable='kobuki_ros_node',
+                                  output='both',
+                                  parameters=[kobuki_params])
+
     # Locate description TODO: Fix the xacro compilation
     urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'compiled_turtlebot_unizar.urdf')
     with open(urdf, 'r') as infp:
         robot_description = infp.read()
 
-    # Include the kobuki_node launch file
-    included_kobuki_launch = IncludeLaunchDescription(
-        kobuki_launch_path
-    )
-
     # Group the kobuki_node launch file under the specified namespace
     kobuki_group = GroupAction(
         actions=[
             PushRosNamespace(namespace),  # Apply the namespace dynamically
-            included_kobuki_launch,
+            declare_kobuki_ros_node,
         ]
     )
 
@@ -137,13 +150,13 @@ def generate_launch_description():
     bringup_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(bringup_launch_path),
         launch_arguments={
-            'namespace': namespace,
+            # 'namespace': namespace,
             'use_namespace': use_namespace,
             'slam': slam,
             'map': map_yaml_file,
             'use_localization': use_localization,
             'use_sim_time': use_sim_time,
-            'params_file': params_file,
+            'params_file': nav_params_file,
             'autostart': autostart,
             'use_composition': use_composition,
             'use_respawn': use_respawn,
@@ -159,14 +172,14 @@ def generate_launch_description():
         declare_map_yaml_cmd,
         declare_use_localization_cmd,
         declare_use_sim_time_cmd,
-        declare_params_file_cmd,        
+        declare_nav_params_file_cmd,        
         declare_autostart_cmd,
         declare_use_composition_cmd,
         declare_use_respawn_cmd,
         declare_log_level_cmd,
         declare_use_robot_state_pub_cmd,
         # Include the kobuki group
-        included_kobuki_launch,
+        declare_kobuki_ros_node,
         start_robot_state_publisher_cmd,
         # Include the bringup launch file
         bringup_launch,
