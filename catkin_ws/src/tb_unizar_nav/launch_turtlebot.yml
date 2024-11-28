@@ -13,7 +13,7 @@ windows:
       layout:
       panes:
         - ros2 launch kobuki_node kobuki_node
-        - ros2 run robot_state_publisher robot_state_publisher --ros-args -r use_sim_time:=false robot_description:=$(xacro /root/catkin_ws/src/tb_unizar_nav/urdf/turtlebot_unizar.urdf)
+        - ros2 launch robot_description_unizar.launch.py
   - navigation:
       layout:
       panes:

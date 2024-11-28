@@ -43,7 +43,7 @@ def generate_launch_description():
         description='Use simulation (Gazebo) clock if True',
     )
 
-    # Locate description TODO: Fix the xacro compilation
+    # Locate description TODO: Fix the xacro compilation  https://gist.github.com/clalancette/5d15df1f54a1e01946659dbfa6c46c30
     urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'compiled_turtlebot_unizar.urdf')
     with open(urdf, 'r') as infp:
         robot_description = infp.read()
@@ -71,6 +71,6 @@ def generate_launch_description():
         declarenamespace_cmd,
         declare_use_namespace_cmd,
         declare_use_sim_time_cmd,
-        
+
         start_robot_state_publisher_cmd
     ])
