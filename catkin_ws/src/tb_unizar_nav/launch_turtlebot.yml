@@ -1,0 +1,20 @@
+name: turtlebot
+root: ./
+windows:
+
+  # Mission monitoring
+  - mission_monitoring:
+      layout:
+      panes:
+        - echo Run here the mission
+
+  # Kobuki
+  - kobuki:
+      layout:
+      panes:
+        - ros2 launch kobuki_node kobuki_node
+
+  - navigation:
+      layout:
+      panes:
+        - ros2 launch nav2_bringup bringup_launch.py use_localization:=false use_namespace:=false use_composite:=false map:=/root/catkin_ws/src/tb_unizar_nav/maps/dummy.yaml
