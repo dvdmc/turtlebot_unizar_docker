@@ -112,7 +112,7 @@ def generate_launch_description():
     declare_kobuki_ros_node = Node(package='kobuki_node',
                                   executable='kobuki_ros_node',
                                   output='both',
-                                  parameters=kobuki_params_file)
+                                  parameters=[kobuki_params_file])
 
     # Locate description TODO: Fix the xacro compilation
     urdf = os.path.join(tb_unizar_nav_dir, 'urdf', 'compiled_turtlebot_unizar.urdf')
