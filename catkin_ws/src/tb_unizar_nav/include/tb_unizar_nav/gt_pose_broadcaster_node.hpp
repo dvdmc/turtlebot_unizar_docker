@@ -173,21 +173,21 @@ class GTPoseBroadcaster : public rclcpp::Node {
     // mocap_pose could have a different frame_id, we will publish the transform
     // from earth to base_link without checking origin frame_id
 
-    if (!has_earth_to_map_) {
-      earth_to_map_ = tf2::Transform(
-          tf2::Quaternion(msg.pose.orientation.x, msg.pose.orientation.y,
-                          msg.pose.orientation.z, msg.pose.orientation.w),
-          tf2::Vector3(msg.pose.position.x, msg.pose.position.y,
-                       msg.pose.position.z));
+    // if (!has_earth_to_map_) {
+    //   earth_to_map_ = tf2::Transform(
+    //       tf2::Quaternion(msg.pose.orientation.x, msg.pose.orientation.y,
+    //                       msg.pose.orientation.z, msg.pose.orientation.w),
+    //       tf2::Vector3(msg.pose.position.x, msg.pose.position.y,
+    //                    msg.pose.position.z));
 
-      geometry_msgs::msg::TransformStamped earth_to_map;
-      earth_to_map.transform = tf2::toMsg(earth_to_map_);
-      earth_to_map.header.stamp = msg.header.stamp;
-      earth_to_map.header.frame_id = earth_frame_;
-      earth_to_map.child_frame_id = map_frame_;
-      publish_static_transform(earth_to_map);
-      has_earth_to_map_ = true;
-    }
+    //   geometry_msgs::msg::TransformStamped earth_to_map;
+    //   earth_to_map.transform = tf2::toMsg(earth_to_map_);
+    //   earth_to_map.header.stamp = msg.header.stamp;
+    //   earth_to_map.header.frame_id = earth_frame_;
+    //   earth_to_map.child_frame_id = map_frame_;
+    //   publish_static_transform(earth_to_map);
+    //   has_earth_to_map_ = true;
+    // }
 
     // Try to listen to rigid_body_to_base
     try {
@@ -211,13 +211,15 @@ class GTPoseBroadcaster : public rclcpp::Node {
     rigid_body_to_base_.getRotation().getW());
 
     // Publish transform
-    odom_to_base_ =
-        map_to_odom_.inverse() * earth_to_map_.inverse() *
-        tf2::Transform(
+    tf2::Transform earth_to_rigid_body = tf2::Transform(
             tf2::Quaternion(msg.pose.orientation.x, msg.pose.orientation.y,
                             msg.pose.orientation.z, msg.pose.orientation.w),
             tf2::Vector3(msg.pose.position.x, msg.pose.position.y,
-                         msg.pose.position.z)) * rigid_body_to_base_;
+                         msg.pose.position.z));
+
+    odom_to_base_ =
+        map_to_odom_.inverse() * earth_to_map_.inverse() *
+        earth_to_rigid_body * rigid_body_to_base_;
 
     // Print odom_to_base:
     RCLCPP_INFO(get_logger(), "Odom to base: %f %f %f %f %f %f %f",
