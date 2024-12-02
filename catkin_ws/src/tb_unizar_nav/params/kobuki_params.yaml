@@ -6,7 +6,7 @@ kobuki_ros_node:
     battery_dangerous: 13.2
     device_port: /dev/ttyUSB0
     cmd_vel_timeout_sec: 0.6
-    odom_frame: odom
+    odom_frame: odom_kobuki
     base_frame: base_footprint
     publish_tf: true
     use_imu_heading: true

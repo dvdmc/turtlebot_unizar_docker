@@ -8,19 +8,37 @@ RUN apt install git tmux tmuxinator nano iputils-ping net-tools -y
 RUN echo "set -g mouse on" > /root/.tmux.conf
 
 ## ROS2 utils
+
 RUN apt-get install python3-rosdep  \
                 python3-pip     \
                 python3-colcon-common-extensions \
                 python3-colcon-mixin \
                 ros-dev-tools -y
 
+RUN apt-get install python3-flake8 \
+                python3-flake8-builtins  \
+                python3-flake8-comprehensions \
+                python3-flake8-docstrings \
+                python3-flake8-import-order \
+                python3-flake8-quotes -y
+
+RUN pip3 install pylint
+RUN pip3 install flake8==4.0.1
+RUN pip3 install pycodestyle==2.8
+RUN pip3 install cmakelint cpplint
+
 RUN apt-get install cppcheck lcov -y
+
+# AS2
+RUN apt-get install ros-humble-aerostack2 ros-humble-as2-platform-tello ros-humble -y
 RUN colcon mixin update default
+RUN rm -rf log # remove log folder
+
+RUN pip3 install colcon-lcov-result cpplint cmakelint
+RUN pip3 install PySimpleGUI-4-foss
 
 # For allowing connection between machines, fastdds has some problem.
 RUN apt-get install ros-humble-rmw-cyclonedds-cpp -y
-
-RUN pip3 install colcon-lcov-result cpplint cmakelint
 
 ## Turtlebot2
 RUN apt install ros-humble-kobuki-velocity-smoother ros-humble-sophus -y
