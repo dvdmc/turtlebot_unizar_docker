@@ -262,9 +262,9 @@ global_costmap:
 # The yaml_filename does not need to be specified since it going to be set by defaults in launch.
 # If you'd rather set it in the yaml, remove the default "map" value in the tb3_simulation_launch.py
 # file & provide full path to map below. If CLI map configuration or launch default is provided, that will be used.
-# map_server:
-#   ros__parameters:
-#     yaml_filename: ""
+map_server:
+  ros__parameters:
+    yaml_filename: ""
 
 map_saver:
   ros__parameters:
@@ -342,7 +342,7 @@ velocity_smoother:
     max_decel: [-2.5, 0.0, -3.2]
     odom_topic: "odom"
     odom_duration: 0.1
-    deadband_velocity: [0.0, 0.0, 0.0]
+    deadband_velocity: [0.0, 0.0, 0.3]
     velocity_timeout: 1.0
 
 collision_monitor:

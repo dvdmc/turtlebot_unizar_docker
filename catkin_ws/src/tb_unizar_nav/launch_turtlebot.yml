@@ -17,4 +17,4 @@ windows:
   - navigation:
       layout:
       panes:
-        - ros2 launch nav2_bringup bringup_launch.py use_localization:=false use_namespace:=false use_composite:=false map:=/root/catkin_ws/src/tb_unizar_nav/maps/dummy.yaml
+        - ros2 launch nav2_bringup bringup_launch.py use_localization:=false use_namespace:=false use_composite:=false map:=/root/catkin_ws/src/tb_unizar_nav/maps/dummy.yaml param_file:=/root/catkin_ws/src/tb_unizar_nav/params/nav2_params.yaml
