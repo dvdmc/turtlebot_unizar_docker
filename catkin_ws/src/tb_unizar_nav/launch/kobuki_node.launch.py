@@ -24,6 +24,8 @@ def generate_launch_description():
     remappings = [
         ('commands/velocity', 'cmd_vel'),
     ]
+    # Add log level to params
+    params['log_level'] = 'debug'
     kobuki_ros_node = launch_ros.actions.Node(package='kobuki_node',
                                               executable='kobuki_ros_node',
                                               output='both',
